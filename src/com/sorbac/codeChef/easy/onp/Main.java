@@ -1,49 +1,74 @@
 package com.sorbac.codeChef.easy.onp;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sorbac on 6.2.2014.
- */
 public class Main {
 
-    public static List<String> processInput(List<String> aLines) {
-        ArrayList<String> processedLines = new ArrayList<String>();
-        for (String myLine : aLines) {
-            processedLines.add(processLine(myLine));
+    public static void main(String[] args) throws Exception {
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+        int numberOfInputs = Integer.parseInt(input.readLine());
+        List<String> myExpressions = readExpressions(input, numberOfInputs);
+        for (int i = 0; i < numberOfInputs; i++) {
+            out.append(processLine(myExpressions.get(i)));
+            out.newLine();
         }
-        return processedLines;
+        out.flush();
     }
 
-    private static String processLine(String myLine) {
+    public static String processLine(String myLine) throws Exception {
         Node tree = createTree(myLine);
         return tree.toStringBuffer().toString();
     }
 
-    private static Node createTree(String myExpression) {
+    private static Node createTree(String myExpression) throws Exception {
+        if (myExpression.startsWith("(")) {
+            myExpression = myExpression.substring(1, myExpression.length() - 1);
+        }
         if (myExpression.length() == 1) {
             return new Node(null, myExpression.charAt(0), null);
-        }
-        int level = countLevel(myExpression);
-        if (level == 0) {
-            return new Node(new Node(null, myExpression.charAt(0), null),
-                    myExpression.charAt(1),
-                    new Node(null, myExpression.charAt(2), null));
         } else {
-            int sameLevelIndex = myExpression.indexOf("(", level + 1);
-            return new Node(createTree(myExpression.substring(level, sameLevelIndex - 2)),
-                    myExpression.charAt(sameLevelIndex - 1),
-                    createTree(myExpression.substring(sameLevelIndex + 1, myExpression.length() - 2)));
+            int myEndBracket = findEndBracket(myExpression);
+            if (myEndBracket == 0) {
+                return new Node(new Node(null, myExpression.charAt(0), null),
+                        myExpression.charAt(1),
+                        createTree(myExpression.substring(2, myExpression.length())));
+            } else {
+                return new Node(createTree(myExpression.substring(0, myEndBracket + 1)),
+                        myExpression.charAt(myEndBracket + 1),
+                        createTree(myExpression.substring(myEndBracket + 2, myExpression.length())));
+            }
         }
     }
 
-    public static int countLevel(String myLine) {
-        int level = 0;
-        while (myLine.charAt(level) == '(') {
-            level++;
+    private static int findEndBracket(String aMyExpression) throws Exception {
+        int myLevel = 0;
+        char[] myChars = aMyExpression.toCharArray();
+        for(int i = 0;i < aMyExpression.length(); i++) {
+            if (myChars[i] == '(') {
+                myLevel++;
+            } else if (myChars[i] == ')') {
+                myLevel--;
+            }
+            if (myLevel == 0) {
+                return i;
+            }
         }
-        return level;
+        throw new Exception("End bracket not found!");
+    }
+
+    private static List<String> readExpressions(BufferedReader aInput, int aNumberOfInputs) throws IOException {
+        List<String> myExpressions = new ArrayList<String>(aNumberOfInputs);
+        for(int i = 0; i < aNumberOfInputs; i++) {
+            myExpressions.add(aInput.readLine());
+        }
+        return myExpressions;
     }
 
     public static class Node {
