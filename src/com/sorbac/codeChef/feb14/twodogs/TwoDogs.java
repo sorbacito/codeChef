@@ -1,5 +1,11 @@
 package com.sorbac.codeChef.feb14.twodogs;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TwoDogs {
@@ -10,45 +16,43 @@ public class TwoDogs {
         theAppleSum = aAppleSum;
     }
 
+    public static void main(String[] args) throws IOException {
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+        int expectedAppleSum = Integer.parseInt(input.readLine().split(" ")[1]);
+        List<Integer> myApples = getApples(input);
+        out.write(Integer.valueOf(new TwoDogs(expectedAppleSum).getSolution(myApples)).toString());
+        out.flush();
+    }
+
+    private static List<Integer> getApples(BufferedReader aInput) throws IOException {
+        String[] myApples = aInput.readLine().split(" ");
+        List<Integer> myApplesToReturn = new ArrayList<Integer>(myApples.length);
+        for (String myApple : myApples) {
+            myApplesToReturn.add(Integer.parseInt(myApple));
+        }
+        return myApplesToReturn;
+    }
+
     public int getSolution(List<Integer> aApples) {
-        Solution mySolution = null;
+        int myMinDistance = -1;
         int myApplesCount = aApples.size();
         for (int i = 0; i < myApplesCount - 1; i++) {
             for (int j = i + 1; j < myApplesCount; j++) {
                 if (aApples.get(i) + aApples.get(j) == theAppleSum) {
-                    final Solution myTempSolution = new Solution(aApples.get(i), aApples.get(j), myApplesCount);
-                    if (mySolution == null) {
-                        mySolution = myTempSolution;
+                    final int myDistance = Math.max(Math.min(aApples.get(i), myApplesCount - aApples.get(i)),
+                            Math.min(aApples.get(j),
+                                    myApplesCount - aApples.get(j)));
+                    if (myMinDistance == -1) {
+                        myMinDistance = myDistance;
                     } else {
-                        if (myTempSolution.compareTo(mySolution) < 0) {
-                            mySolution = myTempSolution;
+                        if (myDistance < 0) {
+                            myMinDistance = myDistance;
                         }
                     }
                 }
             }
         }
-        return mySolution == null ? -1 : mySolution.distance();
-    }
-
-    public static class Solution implements Comparable<Solution> {
-        private final int apple1Position;
-        private final int apple2Position;
-        private final int numberOfApples;
-
-        public Solution(int aApple1, int aApple2, int aNumberOfApples) {
-            apple1Position = aApple1;
-            apple2Position = aApple2;
-            numberOfApples = aNumberOfApples;
-        }
-
-        public int distance() {
-            return Math.max(Math.min(apple1Position, numberOfApples - apple1Position), Math.min(apple2Position,
-                    numberOfApples - apple2Position));
-        }
-
-        @Override
-        public int compareTo(Solution other) {
-            return other.distance() - other.distance();
-        }
+        return myMinDistance;
     }
 }
