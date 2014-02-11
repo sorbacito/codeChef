@@ -11,9 +11,13 @@ import java.util.List;
 public class TwoDogs {
 
     private final int theAppleSum;
+    private final int[] shortestPaths;
+    private int minimalPath;
 
     public TwoDogs(int aAppleSum) {
         theAppleSum = aAppleSum;
+        shortestPaths = new int[aAppleSum - 1];
+        minimalPath = theAppleSum + 1;
     }
 
     public static void main(String[] args) throws IOException {
@@ -35,24 +39,29 @@ public class TwoDogs {
     }
 
     public int getSolution(List<Integer> aApples) {
-        int myMinDistance = -1;
         int myApplesCount = aApples.size();
-        for (int i = 0; i < myApplesCount - 1; i++) {
-            for (int j = i + 1; j < myApplesCount; j++) {
-                if (aApples.get(i) + aApples.get(j) == theAppleSum) {
-                    final int myDistance = Math.max(Math.min(aApples.get(i), myApplesCount - aApples.get(i)),
-                            Math.min(aApples.get(j),
-                                    myApplesCount - aApples.get(j)));
-                    if (myMinDistance == -1) {
-                        myMinDistance = myDistance;
-                    } else {
-                        if (myDistance < 0) {
-                            myMinDistance = myDistance;
-                        }
-                    }
+        for (int i = 0; i < myApplesCount; i++) {
+            if (aApples.get(i) < theAppleSum && (2 * aApples.get(i) != theAppleSum)) {
+                int path = Math.min(i + 1, myApplesCount - i);
+                if (shortestPaths[aApples.get(i) - 1] == 0 || shortestPaths[aApples.get(i) - 1] > path) {
+                    updatePaths(aApples.get(i), path);
                 }
             }
         }
-        return myMinDistance;
+        return minimalPath == theAppleSum + 1 ? -1 : minimalPath;
+    }
+
+    private void updatePaths(int aAppleValue, Integer aPathLength) {
+        shortestPaths[aAppleValue - 1] = aPathLength;
+        if (shortestPaths[theAppleSum - aAppleValue - 1] != 0) {
+            updateMinimalPath(shortestPaths[theAppleSum - aAppleValue - 1], aPathLength);
+        }
+    }
+
+    private void updateMinimalPath(int aPath1, int aPath2) {
+        int candidate = Math.max(aPath1, aPath2);
+        if (candidate < minimalPath) {
+            minimalPath = candidate;
+        }
     }
 }
