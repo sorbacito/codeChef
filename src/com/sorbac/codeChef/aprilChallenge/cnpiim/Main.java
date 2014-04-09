@@ -1,26 +1,7 @@
 package com.sorbac.codeChef.aprilChallenge.cnpiim;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
-/*
- *  Copyright 1999,2001 Clearstream Services, Luxembourg.
- *  All rights reserved.
- *
- *  This software is the confidential and proprietary information
- *  of Clearstream Services ("Confidential Information").  You
- *  shall not disclose such Confidential Information and shall use
- *  it only in accordance with the terms of the license agreement
- *  you entered into with CS.
- *
- *  @author: Stanislav Kovalcin (ky234) |HUB team|
- *  Date: 09/04/14
- *  Time: 19:09
- *
- */
 public class Main {
     private static final int[] theResults = new int[1250 * 1250];
 
@@ -38,13 +19,13 @@ public class Main {
 
     int computeMatrices(int aTrace) {
         int myMatrices = 0;
-        for (int i = 1; i <= aTrace / 2; i++) {
+        for (int i = 1; i < (aTrace + 1) / 2; i++) {
             myMatrices += getNumberOfMultiplications(i * (aTrace - i) - 1);
         }
         if (aTrace % 2 == 0) {
-            return 2 * myMatrices - getNumberOfMultiplications(aTrace / 2);
+            return 2 * myMatrices + getNumberOfMultiplications((aTrace / 2) * (aTrace / 2) - 1);
         } else {
-            return 2 * myMatrices + getNumberOfMultiplications((aTrace + 1) / 2);
+            return 2 * myMatrices;
         }
     }
 

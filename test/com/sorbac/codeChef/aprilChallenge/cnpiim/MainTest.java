@@ -30,7 +30,27 @@ public class MainTest {
     }
 
     @Test
-    public void testMatrices() throws Exception {
+    public void testMatrices3() throws Exception {
         assert theMain.computeMatrices(3) == 2;
     }
+
+    @Test
+    public void testMatrices4() throws Exception {
+        assert theMain.computeMatrices(4) == 11;
+    }
+
+    // 1*3 - 1 = 2 -> 2 + 1
+    // 2*2 - 1 = 3 -> 3 + 1 + 1
+    // 3*1 - 1 = 2 -> 2 + 1
+
+    @Test
+    public void testMatrices5() throws Exception {
+        assert theMain.computeMatrices(5) == 30;
+    }
+
+    // 1*4 - 1 = 3 -> 3 + 1 + 1
+    // 2*3 - 1 = 5 -> 5 + 2 + 1 + 1 + 1
+    // 3*2 - 1 = 5 -> 5 + 2 + 1 + 1 + 1
+    // 4*1 - 1 = 3 -> 3 + 1 + 1
+
 }
