@@ -34,6 +34,9 @@ public class MainTest {
         assert theMain.computeMatrices(3) == 2;
     }
 
+    // 1*2 - 1 = 1 -> 1
+    // 2*1 - 1 = 1 -> 1
+
     @Test
     public void testMatrices4() throws Exception {
         assert theMain.computeMatrices(4) == 11;
@@ -52,5 +55,15 @@ public class MainTest {
     // 2*3 - 1 = 5 -> 5 + 2 + 1 + 1 + 1
     // 3*2 - 1 = 5 -> 5 + 2 + 1 + 1 + 1
     // 4*1 - 1 = 3 -> 3 + 1 + 1
+    @Test
+    public void testMatrices6() throws Exception {
+        assert theMain.computeMatrices(6) == 68;
+    }
+
+    // 1*5 - 1 = 4 -> 4 + 2 + 1 + 1 = 8
+    // 2*4 - 1 = 7 -> 7 + 3 + 2 + 1 + 1 + 1 + 1 = 16
+    // 3*3 - 1 = 8 -> 8 + 4 + 2 + 2 + 1 + 1 + 1 + 1 = 20
+    // 4*2 - 1 = 7 -> 7 + 3 + 2 + 1 + 1 + 1 + 1 = 16
+    // 5*1 - 1 = 4 -> 4 + 2 + 1 + 1 = 8
 
 }
