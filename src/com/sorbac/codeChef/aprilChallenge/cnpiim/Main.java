@@ -1,24 +1,52 @@
 package com.sorbac.codeChef.aprilChallenge.cnpiim;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-    private static final int[] theResults = new int[1250 * 1250];
+
+    private static Integer[] PRIMES_1250 = getFirstPrimes(1250);
+
+    private static Integer[] getFirstPrimes(int aMaxValue) {
+        int[] myIntegers = new int[aMaxValue];
+        for (int i = 0; i < aMaxValue; i++) {
+            myIntegers[i] = i;
+        }
+        myIntegers[1] = 0;
+        for (int i = 2; i < Math.sqrt(aMaxValue); i++) {
+            if (myIntegers[i] != 0) {
+                for (int j = 2; j * i < aMaxValue; j++) {
+                    myIntegers[j * i] = 0;
+                }
+            }
+        }
+        List<Integer> myPrimes = new ArrayList<Integer>();
+        for (int i = 2; i < aMaxValue; i++) {
+            if (myIntegers[i] != 0) {
+                myPrimes.add(i);
+            }
+        }
+        return myPrimes.toArray(new Integer[myIntegers.length]);
+    }
+
+    private final long[] theResults = new long[1250 * 1250];
+    private int theHighestComputed = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
-        int myNumberOfTestCases = Integer.parseInt(input.readLine());
+        long myNumberOfTestCases = Integer.parseInt(input.readLine());
         final Main myMain = new Main();
-        for (int i = 0; i < myNumberOfTestCases; i++) {
-            out.append(Integer.valueOf(myMain.computeMatrices(Integer.parseInt(input.readLine()))).toString());
+        for (long i = 0; i < myNumberOfTestCases; i++) {
+            out.append(Long.valueOf(myMain.computeMatrices(Integer.parseInt(input.readLine()))).toString());
             out.newLine();
         }
         out.flush();
     }
 
-    int computeMatrices(int aTrace) {
-        int myMatrices = 0;
+    long computeMatrices(int aTrace) {
+        long myMatrices = 0;
         for (int i = 1; i < (aTrace + 1) / 2; i++) {
             myMatrices += getNumberOfMultiplications(i * (aTrace - i) - 1);
         }
@@ -29,18 +57,20 @@ public class Main {
         }
     }
 
-    int getNumberOfMultiplications(int aNumber) {
-        int mySum = 0;
+    long getNumberOfMultiplications(int aNumber) {
+        long mySum = 0;
         if (theResults[aNumber] == 0) {
-            final int myTreshold = (aNumber + 1) / 2;
-            for (int i = 1; i <= myTreshold; i++) {
-                mySum += aNumber / i;
+            for (int i = theHighestComputed + 1; i <= aNumber; i++) {
+                int myAddition = 0;
+                int mySqrt = (int) Math.sqrt(i);
+                for (int j = 0; PRIMES_1250[j] <= mySqrt; j++) {
+                    int myI = i;
+                    while (myI % PRIMES_1250[j] == 0) {
+
+                    }
+                }
             }
-            mySum += aNumber - myTreshold;
-            theResults[aNumber] = mySum;
-            return mySum;
-        } else {
-            return theResults[aNumber];
         }
+        return theResults[aNumber];
     }
 }

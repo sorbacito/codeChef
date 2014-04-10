@@ -26,13 +26,41 @@ public class MainTest {
         assert theMain.getNumberOfMultiplications(1) == 1;
         assert theMain.getNumberOfMultiplications(2) == 3;
         assert theMain.getNumberOfMultiplications(3) == 5;
+        assert theMain.getNumberOfMultiplications(4) == 8;
         assert theMain.getNumberOfMultiplications(5) == 10;
+        assert theMain.getNumberOfMultiplications(6) == 14;
+        assert theMain.getNumberOfMultiplications(7) == 16;
+    }
+
+    @Test
+    public void testHighest() throws Exception {
+        assert theMain.getNumberOfMultiplications(1250 * 1250 - 1) > 0;
+
+    }
+
+    @Test
+    public void testMatrices() throws Exception {
+        assert theMain.computeMatrices(3) == 2;
+        assert theMain.computeMatrices(4) == 11;
+        assert theMain.computeMatrices(5) == 30;
+        assert theMain.computeMatrices(2500) > 0;
     }
 
     @Test
     public void testMatrices3() throws Exception {
         assert theMain.computeMatrices(3) == 2;
     }
+
+    // 1 -> 1, 2 -> 3, 3 -> 5, 4 -> 8, 5 -> 10, 6 -> 14, 7 -> 16
+    // 1 -> 1,1
+    // 2 -> 1,2 2,1
+    // 3 -> 1,3 3,1
+    // 4 -> 1,4 2,2 4,1
+    // 5 -> 1,5 5,1
+    // 6 -> 1,6 2,3 3,2 6,1
+    // 7 -> 1,7 7,1
+    // 8 -> 1,8 2,4 4,2 8,1
+    // 9 -> 1,9 3,3 9,1
 
     // 1*2 - 1 = 1 -> 1
     // 2*1 - 1 = 1 -> 1
