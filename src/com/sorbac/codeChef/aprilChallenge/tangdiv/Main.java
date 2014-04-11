@@ -1,10 +1,6 @@
 package com.sorbac.codeChef.aprilChallenge.tangdiv;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -52,18 +48,20 @@ public class Main {
             theRight = aRight;
         }
 
-        public boolean contains(Pair value) {
-            if (value.getLeft() < value.getRight()) {
-                return theLeft <= value.getLeft() && (value.getRight() <= theRight || theRight < theLeft);
-            } else {
-                if (theLeft > theRight) {
-                    return (value.getLeft() >= theLeft || value.getLeft() <= theRight) &&
-                            (value.getRight() <= theRight || value.getRight() >= theLeft);
-                } else {
-                    return (value.getLeft() == value.getRight())
-                            && (theLeft <= value.getLeft() && theRight >= value.getRight());
-                }
+        public boolean contains(Pair value, int numberOfValues) {
+            int myLeft = theLeft;
+            int myRight = theRight;
+            if (theLeft > theRight) {
+                myRight += numberOfValues;
             }
+            int myValueLeft = value.getLeft();
+            int myValueRight = value.getRight();
+            if (myValueLeft > myValueRight) {
+                myValueRight += numberOfValues;
+            }
+            return (myLeft <= myValueLeft && myRight >= myValueRight)
+                    || ((myLeft + numberOfValues <= myValueLeft) && (myRight + numberOfValues >= myValueRight))
+                    || ((myLeft <= myValueLeft + numberOfValues) && (myRight >= myValueRight + numberOfValues));
         }
 
         public int getLeft() {
@@ -99,7 +97,7 @@ public class Main {
             ArrayList<MyTree> myNewPairs = prepareLeaves(theChangedPairsMap);
             MyTree myChangedPairs = createMyTree(myNewPairs);
             for (Pair myPair : theOriginalPairsMap) {
-                if (!myChangedPairs.containsPair(myPair)) {
+                if (!myChangedPairs.containsPair(myPair, theSegments)) {
                     return "No";
                 }
             }
@@ -126,7 +124,7 @@ public class Main {
                 }
                 if (aSortedPairs.size() % 2 == 1) {
                     myNewPairs.add(new MyTree(aSortedPairs.get(aSortedPairs.size() - 1).value,
-                            aSortedPairs.get(aSortedPairs.size() - 1), null));
+                            null, null));
                 }
                 return createMyTree(myNewPairs);
             } else {
@@ -146,14 +144,16 @@ public class Main {
             right = aRight;
         }
 
-        boolean containsPair(Pair myPair) {
+        boolean containsPair(Pair myPair, int numberOfValues) {
             if (left == null && right == null) {
-                return value.contains(myPair);
+                return value.contains(myPair, numberOfValues);
             } else {
-                if (left != null && left.value.contains(myPair)) {
-                    return left.value.contains(myPair);
+                if (left != null && left.value.contains(myPair, numberOfValues)) {
+                    return left.containsPair(myPair, numberOfValues);
+                } else if (right != null && right.value.contains(myPair, numberOfValues)) {
+                    return right.containsPair(myPair, numberOfValues);
                 } else {
-                    return right.value.contains(myPair);
+                    return false;
                 }
             }
         }
