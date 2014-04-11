@@ -1,12 +1,16 @@
 package com.sorbac.codeChef.aprilChallenge.cnpiim;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
-    private static Integer[] PRIMES_1250 = getFirstPrimes(1250);
+    private static Integer[] PRIMES_1250 = getFirstPrimes(1300);
 
     private static Integer[] getFirstPrimes(int aMaxValue) {
         int[] myIntegers = new int[aMaxValue];
@@ -58,18 +62,24 @@ public class Main {
     }
 
     long getNumberOfMultiplications(int aNumber) {
-        long mySum = 0;
         if (theResults[aNumber] == 0) {
             for (int i = theHighestComputed + 1; i <= aNumber; i++) {
-                int myAddition = 0;
-                int mySqrt = (int) Math.sqrt(i);
-                for (int j = 0; PRIMES_1250[j] <= mySqrt; j++) {
-                    int myI = i;
-                    while (myI % PRIMES_1250[j] == 0) {
-
+                int myAddition = 1;
+                int myI = i;
+                for (int j = 0; PRIMES_1250[j] <= Math.sqrt(i); j++) {
+                    int myFactor = 0;
+                    while (myI % PRIMES_1250[j] == 0 && myI > 1) {
+                        myI /= PRIMES_1250[j];
+                        myFactor++;
                     }
+                    myAddition *= myFactor + 1;
                 }
+                if (myI > 1) {
+                    myAddition *= 2;
+                }
+                theResults[i] = theResults[i - 1] + myAddition;
             }
+            theHighestComputed = aNumber;
         }
         return theResults[aNumber];
     }
