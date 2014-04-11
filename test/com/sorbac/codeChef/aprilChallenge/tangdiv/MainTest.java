@@ -25,6 +25,8 @@ public class MainTest {
         Pair[] myPairsOriginal = new Pair[]{new Pair(1, 4), new Pair(5, 5), new Pair(6, 10)};
         Pair[] myPairsNew = new Pair[]{new Pair(1, 5), new Pair(6, 10)};
         assert new Main.Case(10, myPairsOriginal, myPairsNew).getAnswer().equals("Yes");
+        assert new Main.Case(10, new Pair[]{new Pair(1, 4), new Pair(5, 5), new Pair(6, 10)},
+                new Pair[]{new Pair(1, 5), new Pair(6, 10)}).getAnswer().equals("Yes");
     }
 
     @Test
@@ -38,10 +40,33 @@ public class MainTest {
     public void testPairs() throws Exception {
         assert new Pair(2, 5).contains(new Pair(3, 4));
         assert new Pair(2, 5).contains(new Pair(2, 5));
+        assert new Pair(2, 5).contains(new Pair(2, 4));
+        assert new Pair(2, 5).contains(new Pair(3, 5));
+        assert new Pair(2, 5).contains(new Pair(5, 5));
+        assert new Pair(2, 5).contains(new Pair(2, 2));
+        assert new Pair(2, 5).contains(new Pair(3, 3));
+
+        assert new Pair(2, 5).contains(new Pair(1, 5)) == false;
+        assert new Pair(2, 5).contains(new Pair(2, 6)) == false;
+        assert new Pair(2, 5).contains(new Pair(1, 6)) == false;
+        assert new Pair(2, 5).contains(new Pair(1, 1)) == false;
+        assert new Pair(2, 5).contains(new Pair(6, 6)) == false;
+
+        assert new Pair(2, 5).contains(new Pair(5, 2)) == false;
+        assert new Pair(2, 5).contains(new Pair(6, 2)) == false;
+        assert new Pair(2, 5).contains(new Pair(5, 1)) == false;
+        assert new Pair(2, 5).contains(new Pair(6, 1)) == false;
+        assert new Pair(2, 5).contains(new Pair(6, 6)) == false;
+        assert new Pair(2, 5).contains(new Pair(1, 1)) == false;
+        assert new Pair(2, 5).contains(new Pair(6, 9)) == false;
+
         assert new Pair(9, 3).contains(new Pair(2, 5)) == false;
         assert new Pair(9, 3).contains(new Pair(9, 4)) == false;
         assert new Pair(9, 3).contains(new Pair(9, 3));
         assert new Pair(9, 3).contains(new Pair(9, 2));
         assert new Pair(9, 3).contains(new Pair(10, 2));
+        assert new Pair(3, 3).contains(new Pair(3, 2)) == false;
+        assert new Pair(3, 3).contains(new Pair(3, 3));
+
     }
 }
