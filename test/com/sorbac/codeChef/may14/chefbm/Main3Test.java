@@ -41,22 +41,22 @@ public class Main3Test {
     }
 
     private void checkInvalidProcess(int aMyInputB, int... aInputs) {
-        final ArrayList<Integer> myToSort = new ArrayList<>();
+        final ArrayList<Integer> myToSort = new ArrayList<Integer>();
         if (aInputs[0] != -1) {
             for (int i : aInputs) {
                 myToSort.add(i);
             }
         }
-        int[] myResponse = Main3.isAscendingF(myToSort, aMyInputB);
+        int[] myResponse = Main3.isAscendingF2(myToSort, aMyInputB);
         assert myResponse[0] == 0;
     }
 
     private void checkValidProcess(int aMyInputB, int aFirst, int aLast, int... aInputs) {
-        final ArrayList<Integer> myToSort = new ArrayList<>();
+        final ArrayList<Integer> myToSort = new ArrayList<Integer>();
         for (int i : aInputs) {
             myToSort.add(i);
         }
-        int[] myResponse = Main3.isAscendingF(myToSort, aMyInputB);
+        int[] myResponse = Main3.isAscendingF2(myToSort, aMyInputB);
         assert myResponse[0] == 1;
         assert myResponse[1] == aFirst;
         assert myResponse[2] == aLast;
