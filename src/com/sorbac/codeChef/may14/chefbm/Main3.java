@@ -33,7 +33,11 @@ public class Main3 {
             Collections.sort(myToSort);
             int[] isAscending = isAscendingF(myToSort, myInputB);
             if (isAscending[0] == 1) {
-                myReturn[myEntry.getKey()] = isAscending[2] - isAscending[1];
+                if (myInputB > 1) {
+                    myReturn[myEntry.getKey()] = isAscending[2] - isAscending[1];
+                } else {
+                    myReturn[myEntry.getKey()] = isAscending[2];
+                }
             } else {
                 myReturn[myEntry.getKey()] = -myInputB;
             }

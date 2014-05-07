@@ -13,16 +13,19 @@ public class Main3Test {
         checkInvalidProcess(3, 2, 2);
         checkInvalidProcess(3, 1, 1, 1, 2, 2);
         checkInvalidProcess(4, 2, 2, 4);
+        checkInvalidProcess(5, 2, 2, 4);
     }
 
     @Test
     public void testValid() throws Exception {
         checkValidProcess(2, 2, 1, 1, 1, 2);
         checkValidProcess(2, 1, 0, 1);
+        checkValidProcess(2, 0, 1, 2);
         checkValidProcess(3, 2, 0, 1, 1, 2);
         checkValidProcess(3, 3, 1, 1, 1, 1, 2, 2, 3);
         checkValidProcess(3, 1, 1, 1, 3);
         checkValidProcess(4, 0, 1, 2, 4);
+        checkValidProcess(5, 0, 0, 2, 2, 3, 4);
 
         checkValidProcess(3, 3, 4, 1, 1, 1, 2, 2, 3, 3, 3, 3);
         checkValidProcess(3, 0, 4, 2, 2, 3, 3, 3, 3);
