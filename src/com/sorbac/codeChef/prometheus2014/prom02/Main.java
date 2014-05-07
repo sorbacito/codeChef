@@ -12,7 +12,6 @@ public class Main {
 
     private static final int MAXIMUM = 45;
     private static int[] theFibonacciNumbers = new int[MAXIMUM];
-    private static int theHighest = 0;
 
     static {
         theFibonacciNumbers[0] = 1;
@@ -23,6 +22,19 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
+        new Thread(null, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runMethod();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "", 100 * 1000000).start();
+    }
+
+    private static void runMethod() throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
         List<long[]> myInputs = new ArrayList<long[]>();
@@ -36,11 +48,14 @@ public class Main {
 
     private static long calculatePassword(Integer aInteger) {
         int myInt = aInteger;
-        int myAnswer = findHighestLowerFibNumberIndex(aInteger);
+        long myAnswer = 0;
+        int myIndex;
         while (myInt > 0) {
-
+            myIndex = findHighestLowerFibNumberIndex(myInt);
+            myAnswer += (long) Math.pow(10, myIndex + 1);
+            myInt -= theFibonacciNumbers[myIndex];
         }
-        return 0;
+        return myAnswer / 10;
     }
 
     public static int findHighestLowerFibNumberIndex(Integer aInteger) {

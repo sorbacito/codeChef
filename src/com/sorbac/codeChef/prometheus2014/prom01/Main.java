@@ -11,6 +11,19 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        new Thread(null, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runMethod();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "", 100 * 1000000).start();
+    }
+
+    private static void runMethod() throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         List<long[]> myInputs = new ArrayList<long[]>();
         while (true) {

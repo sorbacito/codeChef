@@ -1,6 +1,14 @@
 package com.sorbac.codeChef.may14.chefbm;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -8,31 +16,76 @@ public class Main {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
         int[] myInputs = readInput(input, 3);
         int[][] myIncCommands = readCommands(input, myInputs[2]);
-        for (long myResult : computeResults(myInputs[0], myInputs[1], myIncCommands)) {
-            out.append(Long.valueOf(myResult).toString());
+        for (long myResult : computeResultsByRow(myInputs[0], myInputs[1], myIncCommands)) {
+            out.append(Long.valueOf(myResult + myInputs[1] - 1).toString());
             out.newLine();
         }
         out.flush();
     }
 
-    public static long[] computeResults(int myInput, int myInput1, int[][] myIncCommands) {
-        long[][] myMatrix = new long[myInput1 + 1][myInput];
-        for (int i = 0; i < myInput1; i ++) {
-            myMatrix[myInput1][i] = myInput - 1;
+    public static long[] computeResultsByRow(int myInputA, int myInputB, int[][] myIncCommands) {
+        long[] myReturn = new long[myInputA];
+        Map<Integer, List<Integer>> mySortedCommands = sortCommands(myIncCommands);
+        for (Map.Entry<Integer, List<Integer>> myEntry : mySortedCommands.entrySet()) {
+            long[] myLine = createNewLine(myInputB);
+            long[] myProblems = createNewLine(myInputB);
+            int myProblemsCount = 0;
+            myProblemsCount = updateOneRow(myInputB, myEntry, myLine, myProblems, myProblemsCount);
+            updateMyReturn(myInputB, myReturn, myEntry, myLine, myProblemsCount);
         }
-        for (int[] myCommand : myIncCommands) {
-            if (myMatrix[myInput1][myCommand[0] - 1] != -1) {
-                myMatrix[myCommand[1] - 1][myCommand[0] - 1]++;
-                if (myCommand[1] < myInput1 - 1 &&
-                        myMatrix[myCommand[1] - 1][myCommand[0] - 1] > myMatrix[myCommand[1]][myCommand[0] - 1] + 1) {
-                    myMatrix[myInput1][myCommand[0] - 1] = -1;
-                }
-                if (myCommand[1] == myInput1) {
-                    myMatrix[myInput1][myCommand[0] - 1]++;
-                }
+        return myReturn;
+    }
+
+    private static int updateOneRow(int myInputB, Map.Entry<Integer, List<Integer>> myEntry, long[] aLine,
+            long[] aProblems, int aProblemsCount) {
+        for (Integer myCommand : myEntry.getValue()) {
+            aProblemsCount = updateWithCommand(myInputB, aLine, aProblems, aProblemsCount, myCommand);
+        }
+        return aProblemsCount;
+    }
+
+    private static void updateMyReturn(int myInputB, long[] aReturn, Map.Entry<Integer, List<Integer>> myEntry,
+            long[] aLine, int aProblemsCount) {
+        if (aProblemsCount == 0) {
+            aReturn[myEntry.getKey()] = aLine[myInputB - 1] - aLine[0];
+        } else {
+            aReturn[myEntry.getKey()] = -myInputB;
+        }
+    }
+
+    private static long[] createNewLine(int myInputB) {
+        return new long[myInputB];
+    }
+
+    public static Map<Integer, List<Integer>> sortCommands(int[][] aIncCommands) {
+        Map<Integer, List<Integer>> mySortedCommandsMap = new HashMap<Integer, List<Integer>>();
+        for (int[] myCommand : aIncCommands) {
+            if (mySortedCommandsMap.get(myCommand[0] - 1) == null) {
+                mySortedCommandsMap.put(myCommand[0] - 1, new ArrayList<Integer>());
             }
+            mySortedCommandsMap.get(myCommand[0] - 1).add(myCommand[1]);
         }
-        return myMatrix[myInput1];
+        return mySortedCommandsMap;
+    }
+
+    public static int updateWithCommand(int myInputB, long[] aLine, long[] aProblems, int aProblemsCount,
+            int myCommandB) {
+        int myProblemsCount = aProblemsCount;
+        aLine[myCommandB - 1]++;
+        if (myCommandB < myInputB &&
+                aLine[myCommandB - 1] > aLine[myCommandB] + 1) {
+            if (aProblems[myCommandB - 1] == 0) {
+                myProblemsCount++;
+            }
+            aProblems[myCommandB - 1]++;
+        }
+        if (myCommandB - 2 >= 0 && aProblems[myCommandB - 2] > 0) {
+            if (aProblems[myCommandB - 2] == 1) {
+                myProblemsCount--;
+            }
+            aProblems[myCommandB - 2]--;
+        }
+        return myProblemsCount;
     }
 
     private static int[][] readCommands(BufferedReader input, int myInput) throws IOException {
