@@ -1,8 +1,6 @@
 package com.sorbac.codeChef.june14.guess;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -22,49 +20,23 @@ public class Main {
     }
 
     public static long[] reduceFraction(long[] aFraction) {
-        List<Long> myDelimiters = findPrimeDelimiters(aFraction[0] < aFraction[1] ? aFraction[0] : aFraction[1]);
-        long[] reducedFraction = new long[]{aFraction[0], aFraction[1]};
-        for (Long myDelimiter : myDelimiters) {
-            while ((reducedFraction[0] % myDelimiter == 0) && (reducedFraction[1] % myDelimiter == 0)) {
-                reducedFraction[0] = reducedFraction[0] / myDelimiter;
-                reducedFraction[1] = reducedFraction[1] / myDelimiter;
-            }
-        }
-        return reducedFraction;
+        long myGreatestCommonDivisor = findGreatestCommonDivisor(aFraction[0], aFraction[1]);
+        return new long[]{aFraction[0] / myGreatestCommonDivisor, aFraction[1] / myGreatestCommonDivisor};
     }
 
-    public static List<Long> findPrimeDelimiters(long aNumber) {
-        List<Long> myPrimes = findPrimesTo((int) aNumber);
-        List<Long> myDelimiters = new ArrayList<Long>();
-        for (Long myPrime : myPrimes) {
-            if (aNumber % myPrime == 0) {
-                myDelimiters.add(myPrime);
+    public static long findGreatestCommonDivisor(long aNumberA, long aNumberB) {
+        long myGcd = aNumberA < aNumberB ? aNumberA : aNumberB;
+        long myToDivide = aNumberA < aNumberB ? aNumberB : aNumberA;
+        if (myGcd == 0 || myToDivide == 0) {
+            return 1;
+        }
+        while (true) {
+            if (myToDivide % myGcd == 0) {
+                return myGcd;
             }
+            myGcd = myToDivide % myGcd;
+            myToDivide = myGcd;
         }
-        return myDelimiters;
-    }
-
-    public static List<Long> findPrimesTo(int aNumber) {
-        long[] myCandidates = new long[aNumber + 1];
-        for (int i = 2; i <= aNumber; i++) {
-            myCandidates[i] = i;
-        }
-        int current = 2;
-        while (current <= aNumber) {
-            if (myCandidates[current] != 0) {
-                for (int i = 2 * current; i <= aNumber; i = i + current) {
-                    myCandidates[i] = 0;
-                }
-            }
-            current++;
-        }
-        List<Long> myPrimes = new ArrayList<Long>();
-        for (Long myCandidate : myCandidates) {
-            if (myCandidate != 0) {
-                myPrimes.add(myCandidate);
-            }
-        }
-        return myPrimes;
     }
 
     public static long[] countFraction(long[] aNumbers) {

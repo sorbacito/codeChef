@@ -4,8 +4,6 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.emptyIterable;
 
 public class MainTest {
     @Test
@@ -31,19 +29,12 @@ public class MainTest {
     }
 
     @Test
-    public void testPrimes() throws Exception {
-        assertThat(Main.findPrimesTo(0), is(emptyIterable()));
-        assertThat(Main.findPrimesTo(1), is(emptyIterable()));
-        assertThat(Main.findPrimesTo(2), containsInAnyOrder(2l));
-        assertThat(Main.findPrimesTo(3), containsInAnyOrder(2l, 3l));
-        assertThat(Main.findPrimesTo(6), containsInAnyOrder(2l, 3l, 5l));
-        assertThat(Main.findPrimesTo(11), containsInAnyOrder(2l, 3l, 5l, 7l, 11l));
-    }
-
-    @Test
-    public void testDelimiters() throws Exception {
-        assertThat(Main.findPrimeDelimiters(15), containsInAnyOrder(3l, 5l));
-        assertThat(Main.findPrimeDelimiters(16), containsInAnyOrder(2l));
+    public void testGcd() throws Exception {
+        assertThat(Main.findGreatestCommonDivisor(15, 6), is(3l));
+        assertThat(Main.findGreatestCommonDivisor(19, 2), is(1l));
+        assertThat(Main.findGreatestCommonDivisor(1000000000, 999999998), is(2l));
+        assertThat(Main.findGreatestCommonDivisor(1000000000, 999999990), is(10l));
+        assertThat(Main.findGreatestCommonDivisor(100, 50), is(50l));
     }
 
     @Test
