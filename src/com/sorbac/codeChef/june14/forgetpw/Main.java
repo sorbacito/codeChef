@@ -41,13 +41,20 @@ public class Main {
             char[] myDecodedPassword = decodePassword(password, codeRules);
             int myLeadingZerosNumber = calculateLeadingZerosNumber(myDecodedPassword);
             int myTrailingZerosNumber = calculateTrailingZerosNumber(myDecodedPassword);
-            char[] myShortestNotation;
-            if (myDecodedPassword[myDecodedPassword.length - 1 - myTrailingZerosNumber] == '.') {
-                myShortestNotation = Arrays.copyOfRange(myDecodedPassword, myLeadingZerosNumber, myDecodedPassword.length - 1 - myTrailingZerosNumber);
+            int myDecimalPointPosition = new String(myDecodedPassword).indexOf(".");
+            if (myDecimalPointPosition >= 0) { // has decimal part
+                myDecodedPassword = Arrays.copyOfRange(myDecodedPassword, myLeadingZerosNumber, myDecodedPassword.length - myTrailingZerosNumber);
             } else {
-                myShortestNotation = Arrays.copyOfRange(myDecodedPassword, myLeadingZerosNumber, myDecodedPassword.length - myTrailingZerosNumber);
+                myDecodedPassword = Arrays.copyOfRange(myDecodedPassword, myLeadingZerosNumber, myDecodedPassword.length);
             }
-            return new String(myShortestNotation);
+            if (myDecodedPassword.length > 0 && myDecodedPassword[myDecodedPassword.length - 1] == '.') {
+                myDecodedPassword = Arrays.copyOfRange(myDecodedPassword, 0, myDecodedPassword.length - 1);
+            }
+            if (myDecodedPassword.length == 0) {
+                return "0";
+            } else {
+                return new String(myDecodedPassword);
+            }
         }
 
         public static char[] decodePassword(String aString, char[] aCodeRules) {
