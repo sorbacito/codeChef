@@ -43,4 +43,29 @@ public class MainTest {
         myCodeRules['#' - '!'] = '.';
         assertThat(new Main.TestCase(myCodeRules, "0xd21#dd098x").getDecodedPassword(), is("321.33098"));
     }
+
+    @Test
+    public void testSpecialCase() throws Exception {
+        assertThat(new Main.TestCase(new char[95], "000").getDecodedPassword(), is("0"));
+        assertThat(new Main.TestCase(new char[95], "0050").getDecodedPassword(), is("50"));
+        assertThat(new Main.TestCase(new char[95], "006").getDecodedPassword(), is("6"));
+
+        assertThat(new Main.TestCase(new char[95], "000.000").getDecodedPassword(), is("0"));
+        assertThat(new Main.TestCase(new char[95], "0.000").getDecodedPassword(), is("0"));
+        assertThat(new Main.TestCase(new char[95], "0500.000").getDecodedPassword(), is("500"));
+
+        assertThat(new Main.TestCase(new char[95], "0000.0500").getDecodedPassword(), is(".05"));
+        assertThat(new Main.TestCase(new char[95], "0000.0006").getDecodedPassword(), is(".0006"));
+
+        assertThat(new Main.TestCase(new char[95], "04000.0006").getDecodedPassword(), is("4000.0006"));
+        assertThat(new Main.TestCase(new char[95], "40000.0006").getDecodedPassword(), is("40000.0006"));
+
+        assertThat(new Main.TestCase(new char[95], "400300.0000").getDecodedPassword(), is("400300"));
+
+        assertThat(new Main.TestCase(new char[95], "500").getDecodedPassword(), is("500"));
+        assertThat(new Main.TestCase(new char[95], "008800").getDecodedPassword(), is("8800"));
+        assertThat(new Main.TestCase(new char[95], "500.00").getDecodedPassword(), is("500"));
+        assertThat(new Main.TestCase(new char[95], "00500.100").getDecodedPassword(), is("500.1"));
+
+    }
 }
