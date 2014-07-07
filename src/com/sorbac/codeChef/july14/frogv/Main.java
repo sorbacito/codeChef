@@ -1,22 +1,74 @@
 package com.sorbac.codeChef.july14.frogv;
 
 import java.io.*;
+import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
         final int[] myConfiguration = readIntArray(input);
-        final int[] myAxis = readIntArray(input);
+        final int[] myPositions = readIntArray(input);
+        final LinkedList<Pair> myAxises = createLinkedList(myPositions, myConfiguration[1]);
         for (int i = 0; i < myConfiguration[2]; i++) {
-            out.append(checkReach(myConfiguration[1], readIntArray(input), myAxis) ? "Yes" : "No");
+            out.append(checkReach(readIntArray(input), myPositions, myAxises) ? "Yes" : "No");
             out.newLine();
         }
         out.flush();
     }
 
-    private static boolean checkReach(int aDistance, int[] aInts, int[] aAxis) {
-        return Math.abs(aAxis[aInts[0] - 1] - aAxis[aInts[1] - 1]) <= aDistance;
+    public static boolean checkReach(int[] aInts, int[] aPositions, LinkedList<Pair> aAxis) {
+        int myIndex = findPair(aAxis, aPositions[aInts[0] - 1]);
+        return aAxis.size() > myIndex && aAxis.get(myIndex).compareAxis(aPositions[aInts[1] - 1]) == 0;
+    }
+
+    public static LinkedList<Pair> createLinkedList(int[] aAxises, long aDistance) {
+        LinkedList<Pair> myPairs = new LinkedList<Pair>();
+        for (int myAxis : aAxises) {
+            int myPairIndex = findPair(myPairs, myAxis);
+            if (myPairs.size() > myPairIndex && myPairs.get(myPairIndex).compareAxis(myAxis) == 0) {
+                myPairs.get(myPairIndex).enlargeIndices(myAxis);
+                makeEnlargement(myPairs, myPairIndex);
+            } else {
+                myPairs.add(myPairIndex, new Pair(myAxis, myAxis, aDistance));
+                makeEnlargement(myPairs, myPairIndex);
+            }
+        }
+        return myPairs;
+    }
+
+    private static void makeEnlargement(LinkedList<Pair> aPairs, int aPairIndex) {
+        int previousIndex = aPairIndex - 1;
+        long firstValue = aPairs.get(aPairIndex).getStartIndex();
+        long lastValue = aPairs.get(aPairIndex).getEndIndex();
+        if (previousIndex >= 0 && aPairs.get(previousIndex).compareAxis(firstValue) == 0) {
+            aPairs.remove(aPairIndex);
+            aPairIndex--;
+            aPairs.get(previousIndex).setEndIndex(lastValue);
+        }
+
+        int nextIndex = aPairIndex + 1;
+        if (nextIndex < aPairs.size() && aPairs.get(nextIndex).compareAxis(lastValue) == 0) {
+            aPairs.remove(aPairIndex);
+            nextIndex--;
+            aPairs.get(nextIndex).setStartIndex(firstValue);
+        }
+    }
+
+    public static int findPair(LinkedList<Pair> aPairs, int aAxis) {
+        int startIndex = 0;
+        int endIndex = aPairs.size();
+        while (startIndex != endIndex) {
+            final int myComparison = aPairs.get(startIndex + endIndex / 2).compareAxis(aAxis);
+            if (myComparison == 0) {
+                return startIndex + endIndex / 2;
+            } else if (myComparison < 0) {
+                endIndex = (startIndex + endIndex - (startIndex + endIndex) % 2) / 2;
+            } else {
+                startIndex = (startIndex + endIndex + (startIndex + endIndex) % 2) / 2;
+            }
+        }
+        return startIndex;
     }
 
     private static int[] readIntArray(BufferedReader aInput) throws IOException {
@@ -28,4 +80,51 @@ public class Main {
         return myConfiguration;
     }
 
+    public static class Pair {
+        private static long MAX_INDEX = 1000000000;
+        private long theStartIndex;
+        private long theEndIndex;
+        private long theDistance;
+
+        public Pair(long aStartIndex, long aEndIndex, long aDistance) {
+            theStartIndex = aStartIndex;
+            theEndIndex = aEndIndex;
+            theDistance = aDistance;
+        }
+
+        public void setStartIndex(long aStartIndex) {
+            theStartIndex = aStartIndex;
+        }
+
+        public void setEndIndex(long aEndIndex) {
+            theEndIndex = aEndIndex;
+        }
+
+        public long getStartIndex() {
+            return theStartIndex;
+        }
+
+        public long getEndIndex() {
+            return theEndIndex;
+        }
+
+        public void enlargeIndices(long aAddedAxis) {
+            if (theStartIndex > aAddedAxis) {
+                theStartIndex = aAddedAxis;
+            }
+            if (theEndIndex < aAddedAxis) {
+                theEndIndex = aAddedAxis;
+            }
+        }
+
+        public int compareAxis(long aIndex) {
+            if (aIndex < theStartIndex - theDistance) {
+                return -1;
+            } else if (theStartIndex - theDistance <= aIndex && theEndIndex + theDistance >= aIndex) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+    }
 }
