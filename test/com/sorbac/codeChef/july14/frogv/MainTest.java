@@ -3,6 +3,7 @@ package com.sorbac.codeChef.july14.frogv;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Random;
 
 public class MainTest {
     @Test
@@ -27,5 +28,28 @@ public class MainTest {
         assert myPairs.size() == 1;
         assert myPairs.get(0).getStartIndex() == 0;
         assert myPairs.get(0).getEndIndex() == 17;
+    }
+
+    @Test(enabled = false)
+    public void testRandom() throws Exception {
+        Random myRandom = new Random();
+        final int myK = 1000000000;
+        for (int i = 0; i < 1000000; i++) {
+            final int iRandom = myRandom.nextInt(100000);
+            int[] myInput = new int[iRandom];
+            for (int j = 0; j < iRandom; j++) {
+                myInput[j] = myRandom.nextInt(myK);
+            }
+            try {
+                Main.createLinkedList(myInput, myRandom.nextInt(myK));
+            } catch (Exception e) {
+                for (int myIn : myInput) {
+                    System.out.print(myIn + " ");
+                }
+                System.out.println();
+                System.out.println(e);
+                throw e;
+            }
+        }
     }
 }

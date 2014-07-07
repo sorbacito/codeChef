@@ -16,7 +16,6 @@ public class MainTest {
         myInput.add(Arrays.asList(1, 1, 1));
         long[] myReturn = Main.TestCase.fillCounts(myInput, 1);
         assert myReturn[0] == 7;
-        assert myReturn[1] == 0;
     }
 
     @Test
@@ -25,7 +24,6 @@ public class MainTest {
         myInput.add(Arrays.asList(1, 1, 1, 1));
         long[] myReturn = Main.TestCase.fillCounts(myInput, 1);
         assert myReturn[0] == 15;
-        assert myReturn[1] == 0;
     }
 
     @Test
@@ -35,7 +33,6 @@ public class MainTest {
         myInput.add(Arrays.asList(1));
         long[] myReturn = Main.TestCase.fillCounts(myInput, 1);
         assert myReturn[0] == 14;
-        assert myReturn[1] == 1;
     }
 
     @Test
@@ -91,8 +88,8 @@ public class MainTest {
     @Test
     public void testTestCase3() throws Exception {
         List<List<Integer>> myInput = new ArrayList<List<Integer>>();
-        myInput.add(Arrays.asList(4, 19));
         myInput.add(Arrays.asList(7));
+        myInput.add(Arrays.asList(4, 19));
         Main.TestCase myTestCase = new Main.TestCase(1, myInput);
         doTest(myTestCase, (double) 120 / 7);
     }
@@ -160,7 +157,7 @@ public class MainTest {
         myInput.add(Arrays.asList(
                 MILLION, MILLION, MILLION, MILLION, MILLION,
                 MILLION, MILLION, MILLION, MILLION, MILLION));
-        Main.TestCase myTestCase = new Main.TestCase(1, myInput);
+        Main.TestCase myTestCase = new Main.TestCase(3, myInput);
         doTest(myTestCase, 7.333333333d);
     }
 
@@ -183,12 +180,51 @@ public class MainTest {
     @Test
     public void testTestCaseMaximum1() throws Exception {
         List<List<Integer>> myInput = new ArrayList<List<Integer>>();
+        myInput.add(Arrays.asList(MILLION, MILLION, MILLION));
         myInput.add(Arrays.asList(MILLION, MILLION));
+        myInput.add(Arrays.asList(6, 78));
+        myInput.add(Arrays.asList(1));
+        myInput.add(Arrays.asList(869, 4458));
+        Main.TestCase myTestCase = new Main.TestCase(2, myInput);
+        doTest(myTestCase, 7.333333333d);
+    }
+
+    @Test
+    public void testTestCase11() throws Exception {
+        List<List<Integer>> myInput = new ArrayList<List<Integer>>();
+        myInput.add(Arrays.asList(MILLION, MILLION, MILLION));
+        myInput.add(Arrays.asList(MILLION, MILLION, MILLION));
         myInput.add(Arrays.asList(MILLION, MILLION));
+        myInput.add(Arrays.asList(MILLION));
         Main.TestCase myTestCase = new Main.TestCase(1, myInput);
         doTest(myTestCase, 7.333333333d);
     }
 
+    @Test
+    public void testTestCase12() throws Exception {
+        List<List<Integer>> myInput = new ArrayList<List<Integer>>();
+        myInput.add(Arrays.asList(1, 1));
+        myInput.add(Arrays.asList(1));
+        Main.TestCase myTestCase = new Main.TestCase(1, myInput);
+        doTest(myTestCase, 7.333333333d);
+    }
+
+    @Test
+    public void testTestCase9() throws Exception {
+        List<List<Integer>> myInput = new ArrayList<List<Integer>>();
+        myInput.add(Arrays.asList(1, 2));
+        Main.TestCase myTestCase = new Main.TestCase(1, myInput);
+        doTest(myTestCase, 2d);
+    }
+
+    @Test
+    public void testTestCase10() throws Exception {
+        List<List<Integer>> myInput = new ArrayList<List<Integer>>();
+        myInput.add(Arrays.asList(3));
+        myInput.add(Arrays.asList(1, 2));
+        Main.TestCase myTestCase = new Main.TestCase(2, myInput);
+        doTest(myTestCase, 5d);
+    }
 
     private void doTest(Main.TestCase myTestCase, double aExpectedValue) {
         double epsilon = 0.000001d;

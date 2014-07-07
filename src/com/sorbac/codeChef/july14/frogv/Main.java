@@ -59,13 +59,15 @@ public class Main {
         int startIndex = 0;
         int endIndex = aPairs.size();
         while (startIndex != endIndex) {
-            final int myComparison = aPairs.get(startIndex + endIndex / 2).compareAxis(aAxis);
+            int myMiddleIndex = (startIndex + endIndex) / 2;
+            myMiddleIndex = myMiddleIndex == 0 ? 0 : myMiddleIndex - 1;
+            final int myComparison = aPairs.get(myMiddleIndex).compareAxis(aAxis);
             if (myComparison == 0) {
-                return startIndex + endIndex / 2;
+                return myMiddleIndex;
             } else if (myComparison < 0) {
-                endIndex = (startIndex + endIndex - (startIndex + endIndex) % 2) / 2;
+                endIndex = myMiddleIndex == endIndex ? myMiddleIndex - 1 : myMiddleIndex;
             } else {
-                startIndex = (startIndex + endIndex + (startIndex + endIndex) % 2) / 2;
+                startIndex = myMiddleIndex == startIndex ? myMiddleIndex + 1 : myMiddleIndex;
             }
         }
         return startIndex;

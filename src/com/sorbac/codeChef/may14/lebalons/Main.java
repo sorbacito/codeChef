@@ -52,24 +52,33 @@ public class Main {
         private final int theMinColors;
         private final List<List<Integer>> thePrices;
         private long[] theCounts;
+        private long theSum;
 
         public TestCase(int aMinColors, List<List<Integer>> aPrices) {
             theMinColors = aMinColors;
             thePrices = aPrices;
             theCounts = fillCounts(aPrices, theMinColors);
+            theSum = fillSum(aPrices);
+        }
+
+        private long fillSum(List<List<Integer>> aPrices) {
+            List<List<Integer>> myPricesWithout = new ArrayList<List<Integer>>();
+            myPricesWithout.addAll(aPrices);
+            myPricesWithout.remove(aPrices.get(0));
+            return theCounts[aPrices.get(0).size() - 1] + calculateCounts(myPricesWithout, theMinColors);
         }
 
         public static long[] fillCounts(List<List<Integer>> aPrices, int theMinColors) {
-            long[] myReturn = new long[2];
-            List<List<Integer>> myPricesWith = new ArrayList<List<Integer>>();
-            List<List<Integer>> myPricesWithout = new ArrayList<List<Integer>>();
-            myPricesWith.addAll(aPrices);
-            myPricesWith.remove(aPrices.get(0));
-            myPricesWithout.addAll(aPrices);
-            myPricesWithout.remove(aPrices.get(0));
-            myReturn[0] = ((long) Math.pow(2, aPrices.get(0).size()) - 1)
-                    * calculateCounts(myPricesWith, theMinColors - 1);
-            myReturn[1] = calculateCounts(myPricesWithout, theMinColors);
+            long[] myReturn = new long[COLORS];
+            for (int i = 0; i < aPrices.size(); i++) {
+                List<List<Integer>> myPricesWith = new ArrayList<List<Integer>>();
+                myPricesWith.addAll(aPrices);
+                myPricesWith.remove(aPrices.get(i));
+                if (myReturn[aPrices.get(i).size() - 1] == 0) {
+                    myReturn[aPrices.get(i).size() - 1] = ((long) Math.pow(2, aPrices.get(i).size()) - 1)
+                            * calculateCounts(myPricesWith, theMinColors - 1);
+                }
+            }
             return myReturn;
         }
 
@@ -100,14 +109,16 @@ public class Main {
 
         public double calculate() {
             double myReturn = 0;
-            double myCoefficient = (theCounts[0] * Math.pow(2, thePrices.get(0).size() - 1))
-                    / ((theCounts[0] + theCounts[1]) * (Math.pow(2, thePrices.get(0).size()) - 1));
-            for (List<Integer> myPrices : thePrices) {
-                for (Integer myPrice : myPrices) {
-                    myReturn += myPrice;
+            for (int i = 0; i < thePrices.size(); i++) {
+                long mySum = 0;
+                double myCoefficient = (theCounts[thePrices.get(i).size() - 1] * Math.pow(2,
+                        thePrices.get(i).size() - 1))
+                        / (theSum * (Math.pow(2, thePrices.get(i).size()) - 1));
+                for (Integer myPrice : thePrices.get(i)) {
+                    mySum += myPrice;
                 }
+                myReturn += myCoefficient * mySum;
             }
-            myReturn *= myCoefficient;
             return myReturn;
         }
     }

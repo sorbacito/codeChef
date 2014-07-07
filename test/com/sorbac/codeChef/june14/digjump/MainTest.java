@@ -17,7 +17,7 @@ public class MainTest {
 
     @Test
     public void testRandom() throws Exception {
-        int myNumbers = 100000;
+        int myNumbers = 10000000;
         int[] mySequence = new int[myNumbers];
         Random myRandom = new Random();
         StringBuilder myStringBuilder = new StringBuilder();
