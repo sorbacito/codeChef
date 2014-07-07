@@ -2,6 +2,7 @@ package com.sorbac.codeChef.july14.frogv;
 
 import org.testng.annotations.Test;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class MainTest {
@@ -25,7 +26,37 @@ public class MainTest {
     public void testLinkedListEnlargement() throws Exception {
         List<Main.Pair> myPairs = Main.createLinkedList(new int[]{11, 4, 8}, 6);
         assert myPairs.size() == 1;
-        assert myPairs.get(0).getStartIndex() == 0;
-        assert myPairs.get(0).getEndIndex() == 17;
+        assert myPairs.get(0).getStartIndex() == 4;
+        assert myPairs.get(0).getEndIndex() == 11;
+    }
+
+    @Test
+    public void test1() throws Exception {
+        LinkedList<Main.Pair> myPairs = Main.createLinkedList(new int[]{0, 5, 7}, 2);
+        assert Main.findIndex(myPairs, 2) == 0;
+        assert Main.findIndex(myPairs, 0) == 0;
+        assert Main.findIndex(myPairs, 3) == 1;
+        assert Main.findIndex(myPairs, 7) == 1;
+        assert Main.findIndex(myPairs, 9) == 1;
+    }
+
+    @Test
+    public void testFindIndex() throws Exception {
+        LinkedList<Main.Pair> myPairs = new LinkedList<Main.Pair>();
+        myPairs.add(0, new Main.Pair(11, 1));
+        myPairs.add(0, new Main.Pair(7, 1));
+        myPairs.add(0, new Main.Pair(3, 1));
+        assert Main.findIndex(myPairs, 1) == 0;
+        assert Main.findIndex(myPairs, 2) == 0;
+        assert Main.findIndex(myPairs, 3) == 0;
+        assert Main.findIndex(myPairs, 4) == 0;
+        assert Main.findIndex(myPairs, 5) == 1;
+        assert Main.findIndex(myPairs, 6) == 1;
+        assert Main.findIndex(myPairs, 7) == 1;
+        assert Main.findIndex(myPairs, 8) == 1;
+        assert Main.findIndex(myPairs, 9) == 2;
+        assert Main.findIndex(myPairs, 12) == 2;
+        assert Main.findIndex(myPairs, 13) == 3;
+        assert Main.findIndex(myPairs, 17) == 3;
     }
 }
