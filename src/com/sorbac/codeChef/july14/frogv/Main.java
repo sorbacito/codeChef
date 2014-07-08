@@ -18,19 +18,19 @@ public class Main {
     }
 
     public static boolean checkReach(int[] aInts, int[] aPositions, LinkedList<Pair> aAxis) {
-        int myIndex = findPair(aAxis, aPositions[aInts[0] - 1]);
+        int myIndex = findIndex(aAxis, aPositions[aInts[0] - 1]);
         return aAxis.size() > myIndex && aAxis.get(myIndex).compareAxis(aPositions[aInts[1] - 1]) == 0;
     }
 
     public static LinkedList<Pair> createLinkedList(int[] aAxises, long aDistance) {
         LinkedList<Pair> myPairs = new LinkedList<Pair>();
         for (int myAxis : aAxises) {
-            int myPairIndex = findPair(myPairs, myAxis);
+            int myPairIndex = findIndex(myPairs, myAxis);
             if (myPairs.size() > myPairIndex && myPairs.get(myPairIndex).compareAxis(myAxis) == 0) {
                 myPairs.get(myPairIndex).enlargeIndices(myAxis);
                 makeEnlargement(myPairs, myPairIndex);
             } else {
-                myPairs.add(myPairIndex, new Pair(myAxis, myAxis, aDistance));
+                myPairs.add(myPairIndex, new Pair(myAxis, aDistance));
                 makeEnlargement(myPairs, myPairIndex);
             }
         }
@@ -55,17 +55,19 @@ public class Main {
         }
     }
 
-    public static int findPair(LinkedList<Pair> aPairs, int aAxis) {
+    public static int findIndex(LinkedList<Pair> aPairs, int aAxis) {
         int startIndex = 0;
         int endIndex = aPairs.size();
         while (startIndex != endIndex) {
-            int myMiddleIndex = (startIndex + endIndex) / 2;
-            myMiddleIndex = myMiddleIndex == 0 ? 0 : myMiddleIndex - 1;
+            final int myMiddleIndex = (startIndex + endIndex) / 2;
             final int myComparison = aPairs.get(myMiddleIndex).compareAxis(aAxis);
             if (myComparison == 0) {
                 return myMiddleIndex;
             } else if (myComparison < 0) {
-                endIndex = myMiddleIndex == endIndex ? myMiddleIndex - 1 : myMiddleIndex;
+                if (aPairs.size() < myMiddleIndex + 1 && aPairs.get(myMiddleIndex + 1).compareAxis(aAxis) > 0) {
+                    return myMiddleIndex;
+                }
+                endIndex = myMiddleIndex;
             } else {
                 startIndex = myMiddleIndex == startIndex ? myMiddleIndex + 1 : myMiddleIndex;
             }
@@ -88,9 +90,9 @@ public class Main {
         private long theEndIndex;
         private long theDistance;
 
-        public Pair(long aStartIndex, long aEndIndex, long aDistance) {
-            theStartIndex = aStartIndex;
-            theEndIndex = aEndIndex;
+        public Pair(long aIndex, long aDistance) {
+            theStartIndex = aIndex;
+            theEndIndex = aIndex;
             theDistance = aDistance;
         }
 
@@ -122,7 +124,7 @@ public class Main {
         public int compareAxis(long aIndex) {
             if (aIndex < theStartIndex - theDistance) {
                 return -1;
-            } else if (theStartIndex - theDistance <= aIndex && theEndIndex + theDistance >= aIndex) {
+            } else if ((theStartIndex - theDistance <= aIndex) && (theEndIndex + theDistance >= aIndex)) {
                 return 0;
             } else {
                 return 1;
