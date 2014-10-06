@@ -2,7 +2,7 @@ package com.sorbac.codeChef.oct14.prladdu;
 
 import java.io.*;
 
-public class Main {
+public class MainSuccessful {
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -41,27 +41,12 @@ public class Main {
             theVillages = aVillages;
         }
 
-        public int calculateDiff() {
-            int myActualSize = 0;
-            int myActualSum = 0;
+        public long calculateDiff() {
+            long myActualSize = 0;
+            long myActualSum = 0;
             for (long myVillage : theVillages) {
-                if (myVillage > 0) {
-                    if (myActualSize > 0) {
-                        myActualSum += myActualSize;
-                        myActualSize += myVillage;
-                    } else {
-                        myActualSum -= myActualSize;
-                        myActualSize += myVillage;
-                    }
-                } else {
-                    if (myActualSize > 0) {
-                        myActualSum += myActualSize;
-                        myActualSize -= myVillage;
-                    } else {
-                        myActualSum -= myActualSize;
-                        myActualSize += myVillage;
-                    }
-                }
+                myActualSum += Math.abs(myActualSize);
+                myActualSize += myVillage;
             }
             return myActualSum;
         }
